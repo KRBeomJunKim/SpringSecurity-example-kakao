@@ -1,6 +1,8 @@
 package com.example.springbootkakaoexample.security.provider;
 
 import com.example.springbootkakaoexample.domain.account.Account;
+import com.example.springbootkakaoexample.security.provider.dto.KakaoTokenResponse;
+import com.example.springbootkakaoexample.security.provider.exception.JsonParsingException;
 import com.example.springbootkakaoexample.security.provider.exception.KakaoTimeoutException;
 import com.example.springbootkakaoexample.security.service.KakaoAccountService;
 import com.example.springbootkakaoexample.security.token.KakaoAuthenticationToken;
@@ -64,7 +66,7 @@ public class KakaoAuthenticationProvider implements AuthenticationProvider {
             KakaoTokenResponse kakaoTokenResponse = objectMapper.readValue(tokenResponse, KakaoTokenResponse.class);
             String accessToken = kakaoTokenResponse.getAccessToken();
 
-            Account account = kakaoUserDetailsService.loadUserByAccessToken(accessToken);
+            Account account = kakaoUserDetailsService.loadAccountByAccessToken(accessToken);
             List<SimpleGrantedAuthority> grantedAuthorities = account.getRoles().stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());

@@ -1,4 +1,4 @@
-package com.example.springbootkakaoexample.security.provider;
+package com.example.springbootkakaoexample.security.provider.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;

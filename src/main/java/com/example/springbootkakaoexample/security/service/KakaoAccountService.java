@@ -25,7 +25,7 @@ public class KakaoAccountService {
     private final AccountRepository accountRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Account loadUserByAccessToken(String accessToken) throws UsernameNotFoundException, JsonProcessingException {
+    public Account loadAccountByAccessToken(String accessToken) throws UsernameNotFoundException, JsonProcessingException {
 
         String tokenInformationResponse = WebClient.create("https://kapi.kakao.com")
                 .get()
