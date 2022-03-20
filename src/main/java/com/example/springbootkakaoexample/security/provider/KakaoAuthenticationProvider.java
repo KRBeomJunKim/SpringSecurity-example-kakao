@@ -1,10 +1,10 @@
 package com.example.springbootkakaoexample.security.provider;
 
-import com.example.springbootkakaoexample.domain.account.Account;
+import com.example.springbootkakaoexample.domain.account.KakaoAccount;
 import com.example.springbootkakaoexample.security.provider.dto.KakaoTokenResponse;
 import com.example.springbootkakaoexample.security.provider.exception.JsonParsingException;
 import com.example.springbootkakaoexample.security.provider.exception.KakaoTimeoutException;
-import com.example.springbootkakaoexample.security.service.KakaoAccountService;
+import com.example.springbootkakaoexample.security.service.KakaoAccountDetailsService;
 import com.example.springbootkakaoexample.security.token.KakaoAuthenticationToken;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class KakaoAuthenticationProvider implements AuthenticationProvider {
 
-    private final KakaoAccountService kakaoUserDetailsService;
+    private final KakaoAccountDetailsService kakaoUserDetailsService;
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${kakao.clientId}")
@@ -66,7 +66,7 @@ public class KakaoAuthenticationProvider implements AuthenticationProvider {
             KakaoTokenResponse kakaoTokenResponse = objectMapper.readValue(tokenResponse, KakaoTokenResponse.class);
             String accessToken = kakaoTokenResponse.getAccessToken();
 
-            Account account = kakaoUserDetailsService.loadAccountByAccessToken(accessToken);
+            KakaoAccount account = kakaoUserDetailsService.loadKakaoAccountByAccessToken(accessToken);
             List<SimpleGrantedAuthority> grantedAuthorities = account.getRoles().stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());

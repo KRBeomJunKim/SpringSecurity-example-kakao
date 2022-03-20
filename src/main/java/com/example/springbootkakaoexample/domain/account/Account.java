@@ -6,18 +6,19 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="oauth_site")
 public class Account {
 
     @Id @GeneratedValue
     private Long id;
 
-    private boolean isKakao;
+    private String username;
 
-    private Long kakaoId;
+    private String password;
 
     private String nickname;
 
@@ -25,5 +26,4 @@ public class Account {
 
     @ElementCollection(fetch = FetchType.LAZY)
     List<String> roles;
-
 }

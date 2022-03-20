@@ -1,7 +1,8 @@
 package com.example.springbootkakaoexample.security.service;
 
 import com.example.springbootkakaoexample.domain.account.Account;
-import com.example.springbootkakaoexample.domain.account.AccountRepository;
+import com.example.springbootkakaoexample.domain.account.KakaoAccount;
+import com.example.springbootkakaoexample.domain.account.KakaoAccountRepository;
 import com.example.springbootkakaoexample.security.provider.exception.KakaoTimeoutException;
 import com.example.springbootkakaoexample.security.service.dto.KakaoAccountResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,12 +21,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class KakaoAccountService {
+public class KakaoAccountDetailsService {
 
-    private final AccountRepository accountRepository;
+    private final KakaoAccountRepository kakaoAccountRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public Account loadAccountByAccessToken(String accessToken) throws UsernameNotFoundException, JsonProcessingException {
+    public KakaoAccount loadKakaoAccountByAccessToken(String accessToken) throws UsernameNotFoundException, JsonProcessingException {
 
         String tokenInformationResponse = WebClient.create("https://kapi.kakao.com")
                 .get()
@@ -47,20 +48,17 @@ public class KakaoAccountService {
 
         KakaoAccountResponse kakaoAccountResponse = objectMapper.readValue(tokenInformationResponse, KakaoAccountResponse.class);
 
-        Account account = accountRepository.findByKakaoId(kakaoAccountResponse.getId())
+        return kakaoAccountRepository.findByKakaoId(kakaoAccountResponse.getId())
                 .orElseGet(() -> {
                     List<String> roles = new ArrayList<>();
                     roles.add("ROLE_USER");
 
-                    return accountRepository.save(Account.builder()
-                            .isKakao(true)
-                            .kakaoId(kakaoAccountResponse.getId())
+                    return kakaoAccountRepository.save(KakaoAccount.builder()
                             .nickname(kakaoAccountResponse.getKakaoAccount().getProfile().getNickname())
                             .profileUrl(kakaoAccountResponse.getKakaoAccount().getProfile().getThumbnailImageUrl())
                             .roles(roles)
+                            .kakaoId(kakaoAccountResponse.getId())
                             .build());
                 });
-
-        return account;
     }
 }

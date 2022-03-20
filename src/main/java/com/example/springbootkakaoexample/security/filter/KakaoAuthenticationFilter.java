@@ -29,7 +29,7 @@ public class KakaoAuthenticationFilter extends AbstractAuthenticationProcessingF
             throw new IsNotKakaoLoginRequest("is not kakao login request.");
         }
 
-        if(hasErrors(request)) {
+        if (hasErrors(request)) {
             throw new KakaoAuthenticationException("Kakao Login Exception");
         }
 
