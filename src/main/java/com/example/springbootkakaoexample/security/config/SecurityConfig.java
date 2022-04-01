@@ -2,6 +2,7 @@ package com.example.springbootkakaoexample.security.config;
 
 import com.example.springbootkakaoexample.security.filter.KakaoAuthenticationFilter;
 import com.example.springbootkakaoexample.security.handler.KakaoAuthenticationAccessHandler;
+import com.example.springbootkakaoexample.security.handler.KakaoAuthenticationFailureHandler;
 import com.example.springbootkakaoexample.security.provider.KakaoAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         KakaoAuthenticationFilter filter = new KakaoAuthenticationFilter();
         filter.setAuthenticationManager(this.authenticationManagerBean());
         filter.setAuthenticationSuccessHandler(new KakaoAuthenticationAccessHandler());
+        filter.setAuthenticationFailureHandler(new KakaoAuthenticationFailureHandler());
         return filter;
     }
 }
